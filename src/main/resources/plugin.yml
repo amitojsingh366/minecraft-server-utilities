@@ -1,0 +1,22 @@
+name: MinecraftDiscordChat
+version: ${project.version}
+main: net.amitoj.minecraftDiscordChat.MinecraftDiscordChat
+api-version: 1.16
+prefix: MinecraftDiscordChat
+authors: [ amitojsingh366 ]
+website: https://amitoj.net
+commands:
+  minecraftdiscordchat:
+    aliases: [mdc]
+    description: Turn Minecraft Discord Chat on or off
+    permission: minecraftDiscordChat.default
+    permission-message: You do not have permission to use this command.
+    usage: "Usage: /<command> [on|off|enable|disable]"
+  coordinates:
+    aliases: [ coords ]
+    description: Send the player's current coordinates in chat
+    usage: "Usage: /<command> [location]"
+permissions:
+  minecraftDiscordChat.default:
+    description: Gives permission to change Minecraft Discord Chat settings
+    default: op
