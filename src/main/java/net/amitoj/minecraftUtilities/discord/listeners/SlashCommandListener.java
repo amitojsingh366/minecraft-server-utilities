@@ -2,8 +2,10 @@ package net.amitoj.minecraftUtilities.discord.listeners;
 
 import net.amitoj.minecraftUtilities.discord.commands.List;
 import net.amitoj.minecraftUtilities.discord.commands.Stats;
+import net.amitoj.minecraftUtilities.discord.commands.poll.Kick;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.bukkit.Bukkit;
 
 public class SlashCommandListener extends ListenerAdapter {
@@ -23,6 +25,7 @@ public class SlashCommandListener extends ListenerAdapter {
             event.reply("This command cannot be run in this server").queue();
             return;
         }
+        Bukkit.getLogger().info("Discord Command Used: " + event.getCommandString());
         switch (event.getName()) {
             case "list":
                 new List(event);
@@ -30,8 +33,18 @@ public class SlashCommandListener extends ListenerAdapter {
             case "stats":
                 new Stats(event);
                 break;
+            case "poll":
+                switch (event.getSubcommandName()) {
+                    case "kick":
+                        new Kick(event);
+                        break;
+                    case "ban":
+                        break;
+                    case "whitelist":
+                        break;
+                }
+                break;
             default:
-                Bukkit.getLogger().info("Discord Command Used: " + event.getName());
                 event.reply("Coming soon ;)").queue();
                 break;
         }
