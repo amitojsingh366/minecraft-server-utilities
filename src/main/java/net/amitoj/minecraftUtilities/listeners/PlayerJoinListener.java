@@ -1,7 +1,7 @@
 package net.amitoj.minecraftUtilities.listeners;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
-import net.amitoj.minecraftUtilities.util.PlayerData;
+import net.amitoj.minecraftUtilities.structures.PlayerData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

@@ -1,9 +1,7 @@
 package net.amitoj.minecraftUtilities.commands;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
-import net.amitoj.minecraftUtilities.util.Config;
-import net.amitoj.minecraftUtilities.util.PlayerData;
-import net.amitoj.minecraftUtilities.util.Updater;
+import net.amitoj.minecraftUtilities.structures.PlayerData;
 import net.dv8tion.jda.api.entities.User;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

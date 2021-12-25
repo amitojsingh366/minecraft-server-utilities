@@ -1,4 +1,4 @@
-package net.amitoj.minecraftUtilities.util;
+package net.amitoj.minecraftUtilities.structures;
 
 public class PlayerData {
     public String uuid;

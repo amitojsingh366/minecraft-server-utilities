@@ -1,4 +1,4 @@
-package net.amitoj.minecraftUtilities.util;
+package net.amitoj.minecraftUtilities.structures;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import org.bukkit.Bukkit;
@@ -28,21 +28,25 @@ public class Poll {
         this.expires = new Date(timeInSecs + (10 * 60 * 1000));
     }
 
-    public Poll incrementPoll(String discordId) {
+    public Poll incrementVote(String discordId) {
         Vote vote = new Vote(_plugin, discordId, 1);
         if (vote.valid) {
-            Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
-            if (onlinePlayer != null) vote.setVote(2);
+            if (this.type == PollType.KICK || this.type == PollType.WHITELIST) {
+                Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
+                if (onlinePlayer != null) vote.setVote(2);
+            }
             this.votes.push(vote);
         }
         return this;
     }
 
-    public Poll decrementPoll(String discordId) {
+    public Poll decrementVote(String discordId) {
         Vote vote = new Vote(_plugin, discordId, -1);
         if (vote.valid) {
-            Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
-            if (onlinePlayer != null) vote.setVote(-2);
+            if (this.type == PollType.KICK || this.type == PollType.WHITELIST) {
+                Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
+                if (onlinePlayer != null) vote.setVote(-2);
+            }
             this.votes.push(vote);
         }
         return this;

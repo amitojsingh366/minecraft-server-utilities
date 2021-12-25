@@ -1,6 +1,7 @@
-package net.amitoj.minecraftUtilities.util;
+package net.amitoj.minecraftUtilities.structures;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
+import net.amitoj.minecraftUtilities.structures.PlayerData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 

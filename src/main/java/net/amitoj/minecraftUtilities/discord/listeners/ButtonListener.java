@@ -1,7 +1,7 @@
 package net.amitoj.minecraftUtilities.discord.listeners;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
-import net.amitoj.minecraftUtilities.util.PlayerData;
+import net.amitoj.minecraftUtilities.structures.PlayerData;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

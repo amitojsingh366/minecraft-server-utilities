@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class Updater {
     private Config _config;
     private JavaPlugin _plugin;
-    private String _apiUrl = "https://api.github.com/repos/amitojsingh366/minecraft-mentions/releases/latest";
+    private String _apiUrl = "https://github.com/amitojsingh366/minecraft-server-utilities/releases";
 
     public boolean updateAvailable;
     public Float currentVersion;
@@ -31,11 +31,11 @@ public class Updater {
     public Updater(MinecraftUtilities plugin) {
         this._plugin = plugin;
         this._config = plugin.config;
-        // checkForUpdates();
-        // deleteOldFiles();
-        //  if (_config.shouldAutoUpdate && updateAvailable) {
-        //    tryUpdating();
-        // }
+        checkForUpdates();
+        deleteOldFiles();
+        if (_config.shouldAutoUpdate && updateAvailable) {
+            tryUpdating();
+        }
     }
 
     public void checkForUpdates() {

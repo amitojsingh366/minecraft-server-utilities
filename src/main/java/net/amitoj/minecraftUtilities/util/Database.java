@@ -1,6 +1,7 @@
 package net.amitoj.minecraftUtilities.util;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
+import net.amitoj.minecraftUtilities.structures.PlayerData;
 import org.bukkit.entity.Player;
 
 import java.sql.*;

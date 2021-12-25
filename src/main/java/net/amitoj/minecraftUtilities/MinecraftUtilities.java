@@ -5,6 +5,7 @@ import net.amitoj.minecraftUtilities.commands.CommandDiscord;
 import net.amitoj.minecraftUtilities.commands.CommandMinecraftDiscordChat;
 import net.amitoj.minecraftUtilities.discord.DiscordClient;
 import net.amitoj.minecraftUtilities.listeners.*;
+import net.amitoj.minecraftUtilities.structures.PollManager;
 import net.amitoj.minecraftUtilities.util.Config;
 import net.amitoj.minecraftUtilities.util.Database;
 import net.amitoj.minecraftUtilities.util.Updater;
@@ -18,6 +19,7 @@ public final class MinecraftUtilities extends JavaPlugin {
     public Config config = new Config(this);
     public Updater updater = new Updater(this);
     public Database database = new Database(this);
+    public PollManager polls = new PollManager(this);
 
     @Override
     public void onEnable() {
