@@ -4,6 +4,7 @@ import net.amitoj.minecraftUtilities.discord.commands.List;
 import net.amitoj.minecraftUtilities.discord.commands.Stats;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import org.bukkit.Bukkit;
 
 public class SlashCommandListener extends ListenerAdapter {
     private String _guildID = "";
@@ -30,6 +31,7 @@ public class SlashCommandListener extends ListenerAdapter {
                 new Stats(event);
                 break;
             default:
+                Bukkit.getLogger().info("Discord Command Used: " + event.getName());
                 event.reply("Coming soon ;)").queue();
                 break;
         }
