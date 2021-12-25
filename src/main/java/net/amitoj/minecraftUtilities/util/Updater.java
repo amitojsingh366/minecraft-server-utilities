@@ -31,11 +31,11 @@ public class Updater {
     public Updater(MinecraftUtilities plugin) {
         this._plugin = plugin;
         this._config = plugin.config;
-        checkForUpdates();
-        deleteOldFiles();
-        if (_config.shouldAutoUpdate && updateAvailable) {
-            tryUpdating();
-        }
+        //checkForUpdates();
+        //deleteOldFiles();
+        //if (_config.shouldAutoUpdate && updateAvailable) {
+        //    tryUpdating();
+        //}
     }
 
     public void checkForUpdates() {
