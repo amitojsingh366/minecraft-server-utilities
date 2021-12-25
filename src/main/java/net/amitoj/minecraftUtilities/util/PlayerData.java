@@ -10,4 +10,8 @@ public class PlayerData {
         this.discordId = discordId;
         this.ip = ip;
     }
+
+    public void setDiscordId(String discordId) {
+        this.discordId = discordId;
+    }
 }

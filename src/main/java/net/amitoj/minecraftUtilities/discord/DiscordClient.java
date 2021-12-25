@@ -9,6 +9,7 @@ import net.amitoj.minecraftUtilities.util.Config;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -53,8 +54,12 @@ public class DiscordClient extends ListenerAdapter {
         }
     }
 
-    public User getUser(String tag) {
-        return jda.getGuildById(_config.guildID).getMemberByTag(tag).getUser();
+    public User getUserByTagOrId(String tagOrId) {
+        try {
+            Member member = jda.getGuildById(_config.guildID).getMemberById(tagOrId);
+            if (member != null) return member.getUser();
+        } catch (NumberFormatException ignored){}
+        return jda.getGuildById(_config.guildID).getMemberByTag(tagOrId).getUser();
     }
 
     public void shutdown() {

@@ -118,13 +118,13 @@ public class Util {
     public static void sendLoginDM(JDA jda, String discordId, Player loggedPlayer) {
         MessageEmbed loginMessageEmbed = new MessageEmbed("",
                 "New Login",
-                "Someone Just Logged into the server with your account: `" + loggedPlayer.getName() +
-                        "`\nWith the IP: `" + loggedPlayer.getAddress().getHostName() +
-                        "`\nIf this was you please click the green button below, This will whitelist your current IP" +
-                        "\nIf this was not you please click the red button below, this will ban the IP",
+                "Someone Just Logged into the server\nwith your account: `" + loggedPlayer.getName() +
+                        "`\nFrom the IP: `" + loggedPlayer.getAddress().getHostName() +
+                        "`\nIf this was you please click the **green** button below, This will **whitelist** your current IP" +
+                        "\nIf this was not you please click the **red** button below, this will **ban** the IP",
                 EmbedType.RICH,
                 OffsetDateTime.now(),
-                Integer.parseInt("FFA500", 16),
+                Integer.parseInt("FFFF00", 16),
                 new MessageEmbed.Thumbnail("https://mc-heads.net/avatar/" + loggedPlayer.getName(), "https://mc-heads.net/avatar/" + loggedPlayer.getName(), 0, 0),
                 null,
                 null,
@@ -144,6 +144,37 @@ public class Util {
                 .build();
         jda.getUserById(discordId).openPrivateChannel()
                 .flatMap(channel -> channel.sendMessage(loginMessage))
+                .queue();
+    }
+
+    public static void sendAccountChangeDM(Player player, User oldUser, User newUser) {
+        MessageEmbed messageEmbed = new MessageEmbed("",
+                "Account change request",
+                "You have requested to change your discord account from" +
+                        "\n`" + oldUser.getAsTag() + "` -> `" + newUser.getAsTag() + "`",
+                EmbedType.RICH,
+                OffsetDateTime.now(),
+                Integer.parseInt("FF0000", 16),
+                new MessageEmbed.Thumbnail("https://mc-heads.net/avatar/" + player.getName(), "https://mc-heads.net/avatar/" + player.getName(), 0, 0),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        Button allowButton = Button.success("acchange:allow:" + player.getUniqueId() + ":" + newUser.getId(), "Allow Change")
+                .withEmoji(Emoji.fromUnicode("✅"));
+        Button denyButton = Button.danger("acchange:deny:" + player.getUniqueId() + ":" + newUser.getId(), "Deny Change")
+                .withEmoji(Emoji.fromUnicode("❎"));
+
+        Message message = new MessageBuilder()
+                .setEmbeds(messageEmbed)
+                .setActionRows(ActionRow.of(allowButton, denyButton))
+                .build();
+
+        oldUser.openPrivateChannel()
+                .flatMap(channel -> channel.sendMessage(message))
                 .queue();
     }
 }
