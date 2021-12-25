@@ -24,7 +24,6 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Upload built JAR
-        uses: actions/upload-artifact@v2
+        uses: softprops/action-gh-release@v1
         with:
-          name: Package
-          path: target/minecraftUtilities*.jar
+          files: target/minecraftUtilities*.jar
