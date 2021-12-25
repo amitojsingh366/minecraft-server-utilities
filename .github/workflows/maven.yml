@@ -11,7 +11,9 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -19,11 +21,5 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-
-      - name: Upload built JAR
-        uses: softprops/action-gh-release@v1
-        with:
-          files: target/minecraftUtilities*.jar
