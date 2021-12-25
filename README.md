@@ -8,7 +8,7 @@ Messages are sent to discord using a webhook
 Messages are received from discord using the [JDA Library](https://github.com/DV8FromTheWorld/JDA) and a [bot account](https://discord.dev)
 
 ## How To Run
-- Download the latest release from [here](https://github.com/amitojsingh366/minecraft-discord-chat/releases)
+- Download the latest release from [here](https://github.com/amitojsingh366/minecraft-server-utilities/releases)
 - Put it in your paper server's plugin folder
 - Run the server once to generate the config files
 - Configure the plugin using the generated config file *(Located at `.plugins/minecraftdiscordchat/config.json`)*
