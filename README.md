@@ -1,6 +1,5 @@
-# Minecarft Discord Chat
-
-A simple [spigot](https://www.spigotmc.org/) plugin that allows cross chat between minecraft and [discord](https://discord.com)
+# Minecarft Server Utilities
+This plugin is a modified version of one of my other projects called [Minecraft Discord Chat](https://github.com/amitojsingh366/minecraft-discord-chat)
 
 ## How it works
 ### Sending messages to discord
@@ -10,12 +9,12 @@ Messages are received from discord using the [JDA Library](https://github.com/DV
 
 ## How To Run
 - Download the latest release from [here](https://github.com/amitojsingh366/minecraft-discord-chat/releases)
-- Put it in your bukkit/spigot/paper server's plugin folder
+- Put it in your paper server's plugin folder
 - Run the server once to generate the config files
 - Configure the plugin using the generated config file *(Located at `.plugins/minecraftdiscordchat/config.json`)*
 
 # License
-minecarft-discord-chat is licensed under the MIT License
+minecarft-server-utilities is licensed under the MIT License
 
 # Contributing
 Find something that is lacking? Fork the project and pull request!
