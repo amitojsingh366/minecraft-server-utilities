@@ -36,6 +36,14 @@ public class Database {
                 + "	uuid text NOT NULL,\n"
                 + "	discordId text NOT NULL,\n"
                 + "	ip text NOT NULL\n"
+                + ");"
+                + "CREATE TABLE IF NOT EXISTS polls (\n"
+                + "	id integer PRIMARY KEY,\n"
+                + "	uuid text NOT NULL,\n"
+                + "	type integer NOT NULL,\n"
+                + "	forVotes integer NOT NULL,\n"
+                + "	againstVotes integer NOT NULL\n"
+                + "	expires text NOT NULL\n"
                 + ");";
 
         Statement stmt = null;
@@ -46,7 +54,6 @@ public class Database {
             throwables.printStackTrace();
         }
     }
-
 
     public void checkPlayer(Player player) {
         String sql = "SELECT EXISTS(SELECT * FROM players WHERE uuid = ?)";
@@ -92,7 +99,40 @@ public class Database {
             throwables.printStackTrace();
         }
 
-        return new PlayerData(player.getUniqueId().toString(), "", "");
+        return null;
+    }
+
+    public PlayerData getPlayerDataByDiscordId(String id) {
+        String sql = "SELECT EXISTS(SELECT * FROM players WHERE discordId = ?)";
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = _connection.prepareStatement(sql);
+            pstmt.setString(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                if (rs.getBoolean(1)) {
+                    String sql1 = "SELECT * FROM players WHERE discordId = ?";
+                    PreparedStatement pstmt1 = null;
+                    try {
+                        pstmt1 = _connection.prepareStatement(sql1);
+                        pstmt1.setString(1, id);
+                        ResultSet rs1 = pstmt1.executeQuery();
+                        if (rs1.next()) {
+                            return new PlayerData(rs1.getString("uuid"),
+                                    rs1.getString("discordId"),
+                                    rs1.getString("ip"));
+                        }
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return null;
     }
 
     public void updatePlayerData(PlayerData playerData) {
