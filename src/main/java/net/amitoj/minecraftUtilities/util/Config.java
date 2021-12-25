@@ -13,8 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Config {
-    private MinecraftUtilities _plugin;
-    public String configPath = "./plugins/minecraftdiscordchat/config.json";
+    private final MinecraftUtilities _plugin;
+    public String configPath;
+    public String pluginPath;
     public JSONObject defaultConfig = new JSONObject();
 
     public boolean enabled;
@@ -29,6 +30,8 @@ public class Config {
 
     public Config(MinecraftUtilities plugin) {
         this._plugin = plugin;
+        this.pluginPath = plugin.getDataFolder().getPath();
+        this.configPath = pluginPath + "/config.json";
 
         setDefaults();
         checkConfigPath();

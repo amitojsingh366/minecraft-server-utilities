@@ -1,8 +1,8 @@
-name: MinecraftDiscordChat
+name: MinecraftUtilities
 version: ${project.version}
-main: net.amitoj.minecraftDiscordChat.MinecraftDiscordChat
-api-version: 1.16
-prefix: MinecraftDiscordChat
+main: net.amitoj.minecraftUtilities.MinecraftUtilities
+api-version: 1.18
+prefix: MinecraftUtilities
 authors: [ amitojsingh366 ]
 website: https://amitoj.net
 commands:
@@ -16,6 +16,9 @@ commands:
     aliases: [ coords ]
     description: Send the player's current coordinates in chat
     usage: "Usage: /<command> [location]"
+  discord:
+    description: Save the user's discord tag
+    usage: "Usage: /<command> [tag]"
 permissions:
   minecraftDiscordChat.default:
     description: Gives permission to change Minecraft Discord Chat settings

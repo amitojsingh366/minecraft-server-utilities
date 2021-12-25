@@ -1,5 +1,7 @@
 package net.amitoj.minecraftUtilities.discord;
 
+import net.amitoj.minecraftUtilities.MinecraftUtilities;
+import net.amitoj.minecraftUtilities.discord.listeners.ButtonListener;
 import net.amitoj.minecraftUtilities.discord.listeners.ReadyListener;
 import net.amitoj.minecraftUtilities.discord.listeners.SlashCommandListener;
 import net.amitoj.minecraftUtilities.discord.listeners.MessageListener;
@@ -7,18 +9,24 @@ import net.amitoj.minecraftUtilities.util.Config;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 
 import javax.security.auth.login.LoginException;
+
+import static net.amitoj.minecraftUtilities.util.Util.syncCommands;
 
 public class DiscordClient extends ListenerAdapter {
     private Config _config;
 
-    JDA jda;
+    public JDA jda;
     MessageListener messageListener;
 
-    public DiscordClient(Config config) {
-        this._config = config;
+    public DiscordClient(MinecraftUtilities plugin) {
+        this._config = plugin.config;
 
         if (_config.enabled) {
             JDABuilder builder = JDABuilder.createDefault(_config.discordToken);
@@ -28,27 +36,28 @@ public class DiscordClient extends ListenerAdapter {
                 messageListener = new MessageListener(_config.channelID);
                 builder.addEventListeners(new ReadyListener());
                 builder.addEventListeners(new SlashCommandListener(_config.guildID));
+                builder.addEventListeners(new ButtonListener(plugin));
                 builder.addEventListeners(messageListener);
+                builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
+                builder.setMemberCachePolicy(MemberCachePolicy.ALL);
+                builder.setChunkingFilter(ChunkingFilter.ALL);
+
 
                 jda = builder.build();
                 jda.awaitReady();
 
-                jda.getGuildById(_config.guildID)
-                        .upsertCommand("stats", "Get basic stats about your minecraft server")
-                        .queue();
-
-                jda.getGuildById(_config.guildID)
-                        .upsertCommand("list", "List all the online people on your minecraft server")
-                        .queue();
+                syncCommands(jda, _config.guildID);
             } catch (LoginException | InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    public User getUser(String tag) {
+        return jda.getGuildById(_config.guildID).getMemberByTag(tag).getUser();
+    }
+
     public void shutdown() {
-        if (jda != null) {
-            jda.shutdown();
-        }
+        jda.shutdown();
     }
 }

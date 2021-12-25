@@ -31,7 +31,7 @@ public class Stats {
 
         embed.setDescription("\uD83D\uDFE2 Server is online")
                 .addField("Uptime", uptime, false)
-                .addField("Server MOTD", Bukkit.getMotd(), false)
+                .addField("Server MOTD", Bukkit.motd().toString(), false)
                 .addField("Minecraft Version", Bukkit.getMinecraftVersion(), false)
                 .addField("Online Players", Bukkit.getOnlinePlayers().size() + "/" + Bukkit.getMaxPlayers(), false)
                 .setTimestamp(new Date().toInstant())

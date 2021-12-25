@@ -15,11 +15,11 @@ public class SlashCommandListener extends ListenerAdapter {
     @Override
     public void onSlashCommand(SlashCommandEvent event) {
         if (event.getGuild() == null) {
-            event.reply("This command cannot be run in this server");
+            event.reply("This command cannot be run in this server").queue();
             return;
         }
         if (!event.getGuild().getId().equals(_guildID)) {
-            event.reply("This command cannot be run in this server");
+            event.reply("This command cannot be run in this server").queue();
             return;
         }
         switch (event.getName()) {
@@ -28,6 +28,9 @@ public class SlashCommandListener extends ListenerAdapter {
                 break;
             case "stats":
                 new Stats(event);
+                break;
+            default:
+                event.reply("Coming soon ;)").queue();
                 break;
         }
 
