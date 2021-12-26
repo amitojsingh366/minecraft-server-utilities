@@ -23,7 +23,6 @@ public class CommandDiscord implements CommandExecutor {
     // This method is called, when somebody uses our command
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        _plugin.getLogger().info("tag: " + args[0]);
         User newDiscordUser = _plugin.discordClient.getUserByTagOrId(args[0]);
         if (newDiscordUser != null) {
             Player player = Bukkit.getPlayer(sender.getName());
