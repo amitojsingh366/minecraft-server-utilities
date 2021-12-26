@@ -83,6 +83,7 @@ public class Poll {
     }
 
     public void onExpire() {
+        this.expired = true;
         calculateVotes();
         _iHook.editOriginal(generatePollEmbed(this, this.username, true)).queue();
         if (this.upVotes > this.downVotes) {
