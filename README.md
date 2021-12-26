@@ -1,5 +1,6 @@
 # Minecarft Server Utilities
-This plugin is a modified version of one of my other projects called [Minecraft Discord Chat](https://github.com/amitojsingh366/minecraft-discord-chat)
+This plugin is a modified version of one of my other projects called [Minecraft Discord Chat](https://github.com/amitojsingh366/minecraft-discord-chat)  
+I made this for my personal Minecraft Server and it is not intended for public use
 
 ## How it works
 ### Sending messages to discord

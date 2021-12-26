@@ -31,7 +31,7 @@ public class PollManager {
                 new java.util.TimerTask() {
                     @Override
                     public void run() {
-                        if (!poll.expired) manager.expirePoll(poll);
+                        manager.expirePoll(poll);
                     }
                 },
                 300000

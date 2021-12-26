@@ -82,54 +82,55 @@ public class Poll {
     }
 
     public void onExpire() {
-        this.expired = true;
-        calculateVotes();
-        _iHook.editOriginal(generatePollEmbed(this, this.username, true)).queue();
-        if (this.upVotes > this.downVotes && (this.type == PollType.KICK || this.votes.size() >= Bukkit.getOnlinePlayers().size() + 3)) {
-            switch (this.type) {
-                case KICK:
-                    Player kickPlayer = Bukkit.getPlayer(this.username);
-                    if (kickPlayer != null) {
+        if (!this.expired) {
+            this.expired = true;
+            calculateVotes();
+            _iHook.editOriginal(generatePollEmbed(this, this.username, true)).queue();
+            if (this.upVotes > this.downVotes && (this.type == PollType.KICK || this.votes.size() >= Bukkit.getOnlinePlayers().size() + 3)) {
+                switch (this.type) {
+                    case KICK:
+                        Player kickPlayer = Bukkit.getPlayer(this.username);
+                        if (kickPlayer != null) {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, () -> {
+                                kickPlayer.kick(null);
+                            });
+                            _iHook.sendMessage("`" + this.username + "` was kicked!").queue();
+                        } else {
+                            _iHook.sendMessage("`" + this.username + "` is not online anymore!").queue();
+                        }
+                        break;
+                    case BAN:
+                        OfflinePlayer banPlayer = Bukkit.getOfflinePlayerIfCached(this.username);
+                        if (banPlayer != null) {
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, () -> {
+                                banPlayer.banPlayer("Banned by majority vote");
+                            });
+                            _iHook.sendMessage("`" + this.username + "` was banned!").queue();
+                        } else {
+                            _iHook.sendMessage("`" + this.username + "` is not a valid player!").queue();
+                        }
+                        break;
+                    case WHITELIST:
+                        OfflinePlayer whitelistPlayer = Bukkit.getOfflinePlayer(generateOfflineId(this.username));
                         Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, () -> {
-                            kickPlayer.kick(null);
+                            whitelistPlayer.setWhitelisted(true);
+                            Bukkit.reloadWhitelist();
                         });
-                        _iHook.sendMessage("`" + this.username + "` was kicked!").queue();
-                    } else {
-                        _iHook.sendMessage("`" + this.username + "` is not online anymore!").queue();
-                    }
-                    break;
-                case BAN:
-                    OfflinePlayer banPlayer = Bukkit.getOfflinePlayerIfCached(this.username);
-                    if (banPlayer != null) {
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, () -> {
-                            banPlayer.banPlayer("Banned by majority vote");
-                        });
-                        _iHook.sendMessage("`" + this.username + "` was banned!").queue();
-                    } else {
-                        _iHook.sendMessage("`" + this.username + "` is not a valid player!").queue();
-                    }
-                    break;
-                case WHITELIST:
-                    OfflinePlayer whitelistPlayer = Bukkit.getOfflinePlayer(generateOfflineId(this.username));
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, () -> {
-                        whitelistPlayer.setWhitelisted(true);
-                        Bukkit.reloadWhitelist();
-                    });
-                    _iHook.sendMessage("`" + this.username + "` was whitelisted!").queue();
-                    break;
-                case REBOOT:
-                    _iHook.sendMessage("The server will be rebooted").queue();
-                    try {
-                        RebootServer();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    break;
+                        _iHook.sendMessage("`" + this.username + "` was whitelisted!").queue();
+                        break;
+                    case REBOOT:
+                        _iHook.sendMessage("The server will be rebooted").queue();
+                        try {
+                            RebootServer();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+            } else {
+                _iHook.sendMessage("This poll did not have enough votes in favor of the action to be executed").queue();
             }
-        } else {
-            _iHook.sendMessage("This poll did not have enough votes in favor of the action to be executed").queue();
         }
-
     }
 }
 
