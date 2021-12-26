@@ -15,9 +15,24 @@ public class SlashCommandListener extends ListenerAdapter {
     private MinecraftUtilities _plugin;
     private String _guildID = "";
 
+    public List listCommand;
+    public Stats statsCommand;
+    public Ban banCommand;
+    public Kick kickCommand;
+    public Reboot rebootCommand;
+    public Whitelist whitelistCommand;
+
+
     public SlashCommandListener(MinecraftUtilities plugin, String guildID) {
         this._plugin = plugin;
         this._guildID = guildID;
+
+        this.listCommand = new List();
+        this.statsCommand = new Stats();
+        this.banCommand = new Ban(plugin);
+        this.kickCommand = new Kick(plugin);
+        this.rebootCommand = new Reboot(plugin);
+        this.whitelistCommand = new Whitelist(plugin);
     }
 
     @Override
@@ -33,24 +48,24 @@ public class SlashCommandListener extends ListenerAdapter {
         Bukkit.getLogger().info("Discord Command Used: " + event.getCommandString());
         switch (event.getName()) {
             case "list":
-                new List(event);
+                listCommand.execute(event);
                 break;
             case "stats":
-                new Stats(event);
+                statsCommand.execute(event);
                 break;
             case "poll":
                 switch (event.getSubcommandName()) {
                     case "kick":
-                        new Kick(event, _plugin);
+                        kickCommand.execute(event);
                         break;
                     case "ban":
-                        new Ban(event, _plugin);
+                        banCommand.execute(event);
                         break;
                     case "whitelist":
-                        new Whitelist(event, _plugin);
+                        whitelistCommand.execute(event);
                         break;
                     case "reboot":
-                        new Reboot(event, _plugin);
+                        rebootCommand.execute(event);
                         break;
                 }
                 break;

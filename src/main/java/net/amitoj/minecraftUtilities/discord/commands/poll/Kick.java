@@ -13,11 +13,17 @@ import java.util.UUID;
 import static net.amitoj.minecraftUtilities.util.Util.generatePollEmbed;
 
 public class Kick {
-    public Kick(SlashCommandEvent event, MinecraftUtilities plugin) {
+    private MinecraftUtilities _plugin;
+
+    public Kick(MinecraftUtilities plugin) {
+        this._plugin = plugin;
+    }
+
+    public void execute(SlashCommandEvent event) {
         String uuid = event.getOption("username").getAsString();
         Player player = Bukkit.getPlayer(UUID.fromString(uuid));
         if (player != null) {
-            Poll poll = plugin.polls.createPoll(PollType.KICK, player.getName());
+            Poll poll = this._plugin.polls.createPoll(PollType.KICK, player.getName());
             Message message = generatePollEmbed(poll, player.getName(), false);
             event.reply(message).queue(poll::set_iHook);
         } else {

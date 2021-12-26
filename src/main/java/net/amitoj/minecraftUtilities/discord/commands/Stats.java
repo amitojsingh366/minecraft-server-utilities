@@ -10,7 +10,9 @@ import java.lang.management.ManagementFactory;
 import java.util.Date;
 
 public class Stats {
-    public Stats(SlashCommandEvent event) {
+    public Stats() {}
+
+    public void execute(SlashCommandEvent event) {
         final long duration = ManagementFactory.getRuntimeMXBean().getUptime();
         final long years = duration / 31104000000L;
         final long months = duration / 2592000000L % 12;

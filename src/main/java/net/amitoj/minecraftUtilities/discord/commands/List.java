@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 
 public class List {
-    public List(SlashCommandEvent event) {
+    public List() {}
+
+    public void execute(SlashCommandEvent event) {
         StringBuilder onlinePlayerNames = new StringBuilder();
         Collection<? extends Player> onlinePlayers = Bukkit.getServer().getOnlinePlayers();
 
