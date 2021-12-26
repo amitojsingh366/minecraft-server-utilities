@@ -3,6 +3,7 @@ package net.amitoj.minecraftUtilities.listeners;
 
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +25,7 @@ public class ChatListener implements Listener {
     public void onChat(AsyncChatEvent event) {
         if (_enabled) {
             JSONObject postData = new JSONObject();
-            postData.put("content", ChatColor.stripColor(event.message().toString()));
+            postData.put("content", PlainTextComponentSerializer.plainText().serialize(event.message()));
             postData.put("username", event.getPlayer().getPlayerProfile().getName());
             postData.put("avatar_url", "https://mc-heads.net/avatar/" + event.getPlayer().getPlayerProfile().getName());
 
