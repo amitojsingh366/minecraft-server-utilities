@@ -22,11 +22,14 @@ import static net.amitoj.minecraftUtilities.util.Util.syncCommands;
 
 public class DiscordClient extends ListenerAdapter {
     private Config _config;
+    private MinecraftUtilities _plugin;
 
     public JDA jda;
     MessageListener messageListener;
 
+
     public DiscordClient(MinecraftUtilities plugin) {
+        this._plugin = plugin;
         this._config = plugin.config;
 
         if (_config.enabled) {
@@ -36,7 +39,7 @@ public class DiscordClient extends ListenerAdapter {
             try {
                 messageListener = new MessageListener(_config.channelID);
                 builder.addEventListeners(new ReadyListener());
-                builder.addEventListeners(new SlashCommandListener(_config.guildID));
+                builder.addEventListeners(new SlashCommandListener(_plugin, _config.guildID));
                 builder.addEventListeners(new ButtonListener(plugin));
                 builder.addEventListeners(messageListener);
                 builder.enableIntents(GatewayIntent.GUILD_MEMBERS);

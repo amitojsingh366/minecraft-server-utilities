@@ -1,17 +1,21 @@
 package net.amitoj.minecraftUtilities.discord.listeners;
 
+import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.amitoj.minecraftUtilities.discord.commands.List;
 import net.amitoj.minecraftUtilities.discord.commands.Stats;
+import net.amitoj.minecraftUtilities.discord.commands.poll.Ban;
 import net.amitoj.minecraftUtilities.discord.commands.poll.Kick;
+import net.amitoj.minecraftUtilities.discord.commands.poll.Whitelist;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.OptionType;
 import org.bukkit.Bukkit;
 
 public class SlashCommandListener extends ListenerAdapter {
+    private MinecraftUtilities _plugin;
     private String _guildID = "";
 
-    public SlashCommandListener(String guildID) {
+    public SlashCommandListener(MinecraftUtilities plugin, String guildID) {
+        this._plugin = plugin;
         this._guildID = guildID;
     }
 
@@ -36,11 +40,13 @@ public class SlashCommandListener extends ListenerAdapter {
             case "poll":
                 switch (event.getSubcommandName()) {
                     case "kick":
-                        new Kick(event);
+                        new Kick(event, _plugin);
                         break;
                     case "ban":
+                        new Ban(event, _plugin);
                         break;
                     case "whitelist":
+                        new Whitelist(event, _plugin);
                         break;
                 }
                 break;
