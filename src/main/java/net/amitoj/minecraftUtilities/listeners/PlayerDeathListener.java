@@ -47,20 +47,4 @@ public class PlayerDeathListener implements Listener {
             sendWH(postData, _webhookUrl);
         }
     }
-
-    public void set_enabled(boolean _enabled) {
-        this._enabled = _enabled;
-    }
-
-    public void set_webhookUrl(String _webhookUrl) {
-        this._webhookUrl = _webhookUrl;
-    }
-
-    public void set_serverName(String _serverName) {
-        this._serverName = _serverName;
-    }
-
-    public void set_serverIcon(String _serverIcon) {
-        this._serverIcon = _serverIcon;
-    }
 }

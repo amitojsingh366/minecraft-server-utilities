@@ -4,7 +4,6 @@ package net.amitoj.minecraftUtilities.listeners;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.json.simple.JSONObject;
@@ -31,18 +30,5 @@ public class ChatListener implements Listener {
 
             sendWH(postData, _webhookUrl);
         }
-    }
-
-
-    public String get_webhookUrl() {
-        return _webhookUrl;
-    }
-
-    public void set_webhookUrl(String _webhookUrl) {
-        this._webhookUrl = _webhookUrl;
-    }
-
-    public void set_enabled(boolean _enabled) {
-        this._enabled = _enabled;
     }
 }
