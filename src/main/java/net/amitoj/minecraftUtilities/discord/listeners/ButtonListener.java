@@ -2,6 +2,7 @@ package net.amitoj.minecraftUtilities.discord.listeners;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.amitoj.minecraftUtilities.structures.PlayerData;
+import net.amitoj.minecraftUtilities.structures.Poll;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -34,6 +35,7 @@ public class ButtonListener extends ListenerAdapter {
                 } else {
                     event.reply("The player needs to be connected to be whitelisted!").queue();
                 }
+                event.getMessage().delete().queue();
                 break;
             case "ban":
                 Player banPlayer = Bukkit.getServer().getPlayer(UUID.fromString(resolvedAction[1]));
@@ -49,6 +51,7 @@ public class ButtonListener extends ListenerAdapter {
                 } else {
                     event.reply("The player needs to be connected to be banned!").queue();
                 }
+                event.getMessage().delete().queue();
                 break;
             case "acchange":
                 if (Objects.equals(resolvedAction[1], "allow")) {
@@ -65,12 +68,23 @@ public class ButtonListener extends ListenerAdapter {
                 } else {
                     event.reply("Successfully denied account change request").queue();
                 }
+                event.getMessage().delete().queue();
+                break;
+            case "poll":
+                UUID pollId = UUID.fromString(resolvedAction[2]);
+                Poll poll = _plugin.polls.getPoll(pollId);
+                if (poll != null) {
+                    poll.vote(event.getUser().getId(), Objects.equals(resolvedAction[1], "downvote"));
+                    event.deferReply().queue();
+                } else {
+                    event.reply("This poll is over!").queue();
+                    event.getMessage().delete().queue();
+                }
                 break;
             default:
                 event.reply("Invalid Button").queue();
                 break;
         }
 
-        event.getMessage().delete().queue();
     }
 }
