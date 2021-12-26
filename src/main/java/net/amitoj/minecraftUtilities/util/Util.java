@@ -1,5 +1,8 @@
 package net.amitoj.minecraftUtilities.util;
 
+import com.google.common.base.Charsets;
+import net.amitoj.minecraftUtilities.structures.Poll;
+import net.amitoj.minecraftUtilities.structures.PollType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -21,6 +24,7 @@ import java.net.URL;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Util {
 
@@ -111,8 +115,6 @@ public class Util {
         jda.getGuildById(guildID)
                 .upsertCommand(pollCommand)
                 .queue();
-
-        // String offlineId = java.util.UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + getName() ).getBytes( Charsets.UTF_8 ) );
     }
 
     public static void sendLoginDM(JDA jda, String discordId, Player loggedPlayer) {
@@ -177,4 +179,43 @@ public class Util {
                 .flatMap(channel -> channel.sendMessage(message))
                 .queue();
     }
+
+    public static Message generatePollEmbed(Poll poll, String username, Boolean disabled) {
+        String action = poll.type == PollType.KICK ? "Kick"
+                : poll.type == PollType.BAN ? "Ban" : "Whitelist";
+
+        MessageEmbed messageEmbed = new MessageEmbed("",
+                action + " User Poll",
+                "Should `" + username + "` be " + action.toLowerCase() +
+                        (poll.type == PollType.BAN ? "ned?" : "ed?"),
+                EmbedType.RICH,
+                OffsetDateTime.now(),
+                Integer.parseInt("CF9FFF", 16),
+                new MessageEmbed.Thumbnail("https://mc-heads.net/avatar/" + username, "https://mc-heads.net/avatar/" + username, 0, 0),
+                null,
+                null,
+                null,
+                (poll.type == PollType.KICK || poll.type == PollType.WHITELIST) ?
+                        new MessageEmbed.Footer("Online player's votes count 2x", null, null) : null,
+                null,
+                null);
+
+        Button allowButton = Button.primary("poll:upvote:" + poll.uuid.toString(), poll.upVotes.toString())
+                .withEmoji(Emoji.fromUnicode("\uD83D\uDD3C")).withDisabled(disabled);
+        Button denyButton = Button.primary("poll:downvote:" + poll.uuid.toString(), poll.downVotes.toString())
+                .withEmoji(Emoji.fromUnicode("\uD83D\uDD3D")).withDisabled(disabled);
+
+        Message message = new MessageBuilder()
+                .setEmbeds(messageEmbed)
+                .setActionRows(ActionRow.of(allowButton, denyButton))
+                .build();
+
+        return message;
+    }
+
+    public static UUID generateOfflineId(String username){
+        return UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + username ).getBytes( Charsets.UTF_8 ) );
+    }
 }
+
+
