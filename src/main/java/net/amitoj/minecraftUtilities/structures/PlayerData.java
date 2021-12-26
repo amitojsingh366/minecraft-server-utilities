@@ -1,12 +1,14 @@
 package net.amitoj.minecraftUtilities.structures;
 
+import java.util.UUID;
+
 public class PlayerData {
-    public String uuid;
+    public UUID uuid;
     public String discordId;
     public String ip;
 
     public PlayerData(String uuid, String discordId, String ip) {
-        this.uuid = uuid;
+        this.uuid = UUID.fromString(uuid);
         this.discordId = discordId;
         this.ip = ip;
     }

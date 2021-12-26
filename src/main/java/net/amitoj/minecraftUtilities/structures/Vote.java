@@ -23,7 +23,7 @@ public class Vote {
         this.playerData = _plugins.database.getPlayerDataByDiscordId(discordId);
         this.type = type;
         if (this.playerData != null) {
-            this.player = Bukkit.getOfflinePlayer(UUID.fromString(this.playerData.uuid));
+            this.player = Bukkit.getOfflinePlayer(this.playerData.uuid);
         } else {
             this.valid = false;
         }

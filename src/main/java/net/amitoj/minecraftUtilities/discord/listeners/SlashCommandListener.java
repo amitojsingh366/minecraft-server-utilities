@@ -3,10 +3,7 @@ package net.amitoj.minecraftUtilities.discord.listeners;
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.amitoj.minecraftUtilities.discord.commands.List;
 import net.amitoj.minecraftUtilities.discord.commands.Stats;
-import net.amitoj.minecraftUtilities.discord.commands.poll.Ban;
-import net.amitoj.minecraftUtilities.discord.commands.poll.Kick;
-import net.amitoj.minecraftUtilities.discord.commands.poll.Reboot;
-import net.amitoj.minecraftUtilities.discord.commands.poll.Whitelist;
+import net.amitoj.minecraftUtilities.discord.commands.poll.*;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
@@ -18,6 +15,7 @@ public class SlashCommandListener extends ListenerAdapter {
     public List listCommand;
     public Stats statsCommand;
     public Ban banCommand;
+    public Unban unbanCommand;
     public Kick kickCommand;
     public Reboot rebootCommand;
     public Whitelist whitelistCommand;
@@ -30,6 +28,7 @@ public class SlashCommandListener extends ListenerAdapter {
         this.listCommand = new List();
         this.statsCommand = new Stats();
         this.banCommand = new Ban(plugin);
+        this.unbanCommand = new Unban(plugin);
         this.kickCommand = new Kick(plugin);
         this.rebootCommand = new Reboot(plugin);
         this.whitelistCommand = new Whitelist(plugin);
@@ -60,6 +59,9 @@ public class SlashCommandListener extends ListenerAdapter {
                         break;
                     case "ban":
                         banCommand.execute(event);
+                        break;
+                    case "unban":
+                        unbanCommand.execute(event);
                         break;
                     case "whitelist":
                         whitelistCommand.execute(event);

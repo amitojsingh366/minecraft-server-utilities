@@ -143,7 +143,7 @@ public class Database {
             pstmt = _connection.prepareStatement(sql);
             pstmt.setString(1, playerData.discordId);
             pstmt.setString(2, playerData.ip);
-            pstmt.setString(3, playerData.uuid);
+            pstmt.setString(3, playerData.uuid.toString());
 
             pstmt.executeUpdate();
         } catch (SQLException throwables) {

@@ -37,10 +37,10 @@ public class Poll {
         this.expired = false;
     }
 
-    public Poll vote(String discordId, Boolean downVote) {
-        Vote vote = new Vote(_plugin, discordId, downVote ? VoteType.DOWNVOTE : VoteType.UPVOTE);
+    public void vote(String discordId, Boolean downVote) {
         Vote exists = votes.stream().filter(v -> Objects.equals(v.voterId, discordId)).findAny().orElse(null);
         if (exists == null) {
+            Vote vote = new Vote(_plugin, discordId, downVote ? VoteType.DOWNVOTE : VoteType.UPVOTE);
             if (vote.valid) {
                 if (this.type == PollType.KICK || this.type == PollType.WHITELIST || this.type == PollType.REBOOT) {
                     Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
@@ -56,7 +56,6 @@ public class Poll {
             if (votes.size() >= Bukkit.getOnlinePlayers().size() + (this.type == PollType.KICK ? 0 : 3))
                 _manager.expirePoll(this);
         }
-        return this;
     }
 
     public void calculateVotes() {

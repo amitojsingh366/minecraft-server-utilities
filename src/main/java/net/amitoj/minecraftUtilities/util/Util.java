@@ -86,6 +86,16 @@ public class Util {
             }
         }
 
+        OptionData unbanUsernameOptionData = new OptionData(OptionType.STRING, "username",
+                "Username of the player to perform the action on", true);
+
+        Collection<? extends OfflinePlayer> bannedPlayers = Bukkit.getServer().getBannedPlayers();
+        if (!bannedPlayers.isEmpty()) {
+            for (OfflinePlayer player : bannedPlayers) {
+                unbanUsernameOptionData.addChoice(Objects.requireNonNull(player.getName()), player.getUniqueId().toString());
+            }
+        }
+
         CommandData statsCommand = new CommandData("stats",
                 "Get basic stats about your minecraft server");
         jda.getGuildById(guildID)
@@ -105,12 +115,15 @@ public class Util {
         kickSubCommand.addOptions(usernameOptionData);
         SubcommandData banSubCommand = new SubcommandData("ban", "Vote on a player to be banned");
         banSubCommand.addOptions(usernameOptionData);
+        SubcommandData unBanSubCommand = new SubcommandData("unban", "Vote on a player to be unbanned");
+        unBanSubCommand.addOptions(unbanUsernameOptionData);
         SubcommandData whitelistSubCommand = new SubcommandData("whitelist", "Vote on a player to be whitelisted")
                 .addOption(OptionType.STRING, "username", "The username of the player to be whitelisted", true);
         SubcommandData rebootSubCommand = new SubcommandData("reboot", "Vote on the server to be rebooted");
 
         pollCommand.addSubcommands(kickSubCommand);
         pollCommand.addSubcommands(banSubCommand);
+        pollCommand.addSubcommands(unBanSubCommand);
         pollCommand.addSubcommands(whitelistSubCommand);
         pollCommand.addSubcommands(rebootSubCommand);
 
@@ -184,12 +197,12 @@ public class Util {
 
     public static Message generatePollEmbed(Poll poll, String username, Boolean disabled) {
         String action = poll.type == PollType.KICK ? "Kick"
-                : poll.type == PollType.BAN ? "Ban" : "Whitelist";
+                : poll.type == PollType.BAN ? "Ban" : poll.type == PollType.UNBAN ? "Unban" : "Whitelist";
 
         MessageEmbed messageEmbed = new MessageEmbed("",
                 poll.type == PollType.REBOOT ? "Reboot Poll" : (action + " User Poll"),
                 poll.type == PollType.REBOOT ? "Should the server be rebooted?" : ("Should `" + username + "` be " + action.toLowerCase() +
-                        (poll.type == PollType.BAN ? "ned?" : "ed?")),
+                        ((poll.type == PollType.BAN || poll.type == PollType.UNBAN) ? "ned?" : "ed?")),
                 EmbedType.RICH,
                 OffsetDateTime.now(),
                 poll.type == PollType.REBOOT ? Integer.parseInt("FF0000", 16) : Integer.parseInt("CF9FFF", 16),
