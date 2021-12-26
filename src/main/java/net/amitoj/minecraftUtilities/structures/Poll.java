@@ -11,6 +11,7 @@ import java.util.*;
 
 import static net.amitoj.minecraftUtilities.util.Util.generateOfflineId;
 import static net.amitoj.minecraftUtilities.util.Util.generatePollEmbed;
+import static net.amitoj.rebooter.util.util.RebootServer;
 
 public class Poll {
     public UUID uuid;
@@ -41,7 +42,7 @@ public class Poll {
         Vote exists = votes.stream().filter(v -> Objects.equals(v.voterId, discordId)).findAny().orElse(null);
         if (exists == null) {
             if (vote.valid) {
-                if (this.type == PollType.KICK || this.type == PollType.WHITELIST) {
+                if (this.type == PollType.KICK || this.type == PollType.WHITELIST || this.type == PollType.REBOOT) {
                     Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
                     if (onlinePlayer != null) vote.setWasDouble(true);
                 }
@@ -52,10 +53,8 @@ public class Poll {
                 Message m = generatePollEmbed(this, username, false);
                 _iHook.editOriginal(m).queue();
             }
-            if (this.type == PollType.KICK && votes.size() >= Bukkit.getOnlinePlayers().size() +
-                    (this.type == PollType.BAN || this.type == PollType.WHITELIST ? 3 : 0)) _manager.expirePoll(this);
-        } else {
-            _iHook.sendMessage("You cannot vote twice!").queue();
+            if (votes.size() >= Bukkit.getOnlinePlayers().size() + (this.type == PollType.KICK ? 0 : 3))
+                _manager.expirePoll(this);
         }
         return this;
     }
@@ -86,7 +85,7 @@ public class Poll {
         this.expired = true;
         calculateVotes();
         _iHook.editOriginal(generatePollEmbed(this, this.username, true)).queue();
-        if (this.upVotes > this.downVotes) {
+        if (this.upVotes > this.downVotes && (this.type == PollType.KICK || this.votes.size() >= Bukkit.getOnlinePlayers().size() + 3)) {
             switch (this.type) {
                 case KICK:
                     Player kickPlayer = Bukkit.getPlayer(this.username);
@@ -118,8 +117,19 @@ public class Poll {
                     });
                     _iHook.sendMessage("`" + this.username + "` was whitelisted!").queue();
                     break;
+                case REBOOT:
+                    _iHook.sendMessage("The server will be rebooted").queue();
+                    try {
+                        RebootServer();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
+        } else {
+            _iHook.sendMessage("This poll did not have enough votes in favor of the action to be executed").queue();
         }
+
     }
 }
 

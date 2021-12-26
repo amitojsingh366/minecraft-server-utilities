@@ -5,6 +5,7 @@ import net.amitoj.minecraftUtilities.discord.commands.List;
 import net.amitoj.minecraftUtilities.discord.commands.Stats;
 import net.amitoj.minecraftUtilities.discord.commands.poll.Ban;
 import net.amitoj.minecraftUtilities.discord.commands.poll.Kick;
+import net.amitoj.minecraftUtilities.discord.commands.poll.Reboot;
 import net.amitoj.minecraftUtilities.discord.commands.poll.Whitelist;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -47,6 +48,9 @@ public class SlashCommandListener extends ListenerAdapter {
                         break;
                     case "whitelist":
                         new Whitelist(event, _plugin);
+                        break;
+                    case "reboot":
+                        new Reboot(event, _plugin);
                         break;
                 }
                 break;

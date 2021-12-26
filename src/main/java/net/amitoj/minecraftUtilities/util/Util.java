@@ -107,10 +107,12 @@ public class Util {
         banSubCommand.addOptions(usernameOptionData);
         SubcommandData whitelistSubCommand = new SubcommandData("whitelist", "Vote on a player to be whitelisted")
                 .addOption(OptionType.STRING, "username", "The username of the player to be whitelisted", true);
+        SubcommandData rebootSubCommand = new SubcommandData("reboot", "Vote on the server to be rebooted");
 
         pollCommand.addSubcommands(kickSubCommand);
         pollCommand.addSubcommands(banSubCommand);
         pollCommand.addSubcommands(whitelistSubCommand);
+        pollCommand.addSubcommands(rebootSubCommand);
 
         jda.getGuildById(guildID)
                 .upsertCommand(pollCommand)
@@ -185,17 +187,18 @@ public class Util {
                 : poll.type == PollType.BAN ? "Ban" : "Whitelist";
 
         MessageEmbed messageEmbed = new MessageEmbed("",
-                action + " User Poll",
-                "Should `" + username + "` be " + action.toLowerCase() +
-                        (poll.type == PollType.BAN ? "ned?" : "ed?"),
+                poll.type == PollType.REBOOT ? "Reboot Poll" : (action + " User Poll"),
+                poll.type == PollType.REBOOT ? "Should the server be rebooted?" : ("Should `" + username + "` be " + action.toLowerCase() +
+                        (poll.type == PollType.BAN ? "ned?" : "ed?")),
                 EmbedType.RICH,
                 OffsetDateTime.now(),
-                Integer.parseInt("CF9FFF", 16),
-                new MessageEmbed.Thumbnail("https://mc-heads.net/avatar/" + username, "https://mc-heads.net/avatar/" + username, 0, 0),
+                poll.type == PollType.REBOOT ? Integer.parseInt("FF0000", 16) : Integer.parseInt("CF9FFF", 16),
+                poll.type == PollType.REBOOT ? null :
+                        new MessageEmbed.Thumbnail("https://mc-heads.net/avatar/" + username, "https://mc-heads.net/avatar/" + username, 0, 0),
                 null,
                 null,
                 null,
-                (poll.type == PollType.KICK || poll.type == PollType.WHITELIST) ?
+                (poll.type == PollType.KICK || poll.type == PollType.WHITELIST || poll.type == PollType.REBOOT) ?
                         new MessageEmbed.Footer("Online player's votes count 2x", null, null) : null,
                 null,
                 null);
