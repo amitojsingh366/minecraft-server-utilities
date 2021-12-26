@@ -74,8 +74,8 @@ public class ButtonListener extends ListenerAdapter {
                 UUID pollId = UUID.fromString(resolvedAction[2]);
                 Poll poll = _plugin.polls.getPoll(pollId);
                 if (poll != null) {
-                    poll.vote(event.getUser().getId(), Objects.equals(resolvedAction[1], "downvote"));
                     event.deferReply().queue();
+                    poll.vote(event.getUser().getId(), Objects.equals(resolvedAction[1], "downvote"));
                 } else {
                     event.reply("This poll is over!").queue();
                     event.getMessage().delete().queue();

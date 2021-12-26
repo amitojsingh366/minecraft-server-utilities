@@ -200,9 +200,9 @@ public class Util {
                 null,
                 null);
 
-        Button allowButton = Button.primary("poll:upvote:" + poll.uuid.toString(), poll.upVotes.toString())
+        Button allowButton = Button.secondary("poll:upvote:" + poll.uuid.toString(), poll.upVotes.toString())
                 .withEmoji(Emoji.fromUnicode("\uD83D\uDD3C")).withDisabled(disabled);
-        Button denyButton = Button.primary("poll:downvote:" + poll.uuid.toString(), poll.downVotes.toString())
+        Button denyButton = Button.secondary("poll:downvote:" + poll.uuid.toString(), poll.downVotes.toString())
                 .withEmoji(Emoji.fromUnicode("\uD83D\uDD3D")).withDisabled(disabled);
 
         Message message = new MessageBuilder()

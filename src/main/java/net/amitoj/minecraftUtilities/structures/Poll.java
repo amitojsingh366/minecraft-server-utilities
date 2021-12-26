@@ -17,7 +17,7 @@ public class Poll {
     public PollType type;
     public Integer upVotes;
     public Integer downVotes;
-    public Stack<Vote> votes;
+    public Stack<Vote> votes = new Stack<Vote>();
     public Boolean expired;
     public String username;
 
@@ -38,21 +38,25 @@ public class Poll {
 
     public Poll vote(String discordId, Boolean downVote) {
         Vote vote = new Vote(_plugin, discordId, downVote ? VoteType.DOWNVOTE : VoteType.UPVOTE);
-        if (vote.valid) {
-            if (this.type == PollType.KICK || this.type == PollType.WHITELIST) {
-                Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
-                if (onlinePlayer != null) vote.setWasDouble(true);
+        Vote exists = votes.stream().filter(v -> Objects.equals(v.voterId, discordId)).findAny().orElse(null);
+        if (exists == null) {
+            if (vote.valid) {
+                if (this.type == PollType.KICK || this.type == PollType.WHITELIST) {
+                    Player onlinePlayer = Bukkit.getPlayer(vote.playerData.uuid);
+                    if (onlinePlayer != null) vote.setWasDouble(true);
+                }
+                this.votes.push(vote);
             }
-            this.votes.push(vote);
+            calculateVotes();
+            if (_iHook != null) {
+                Message m = generatePollEmbed(this, username, false);
+                _iHook.editOriginal(m).queue();
+            }
+            if (this.type == PollType.KICK && votes.size() >= Bukkit.getOnlinePlayers().size() +
+                    (this.type == PollType.BAN || this.type == PollType.WHITELIST ? 3 : 0)) _manager.expirePoll(this);
+        } else {
+            _iHook.sendMessage("You cannot vote twice!").queue();
         }
-        calculateVotes();
-        if (_iHook != null) {
-            Message m = generatePollEmbed(this, username, false);
-            _iHook.editOriginal(m).queue();
-        }
-        if (this.type == PollType.KICK && votes.size() >= Bukkit.getOnlinePlayers().size() +
-                (this.type == PollType.BAN || this.type == PollType.WHITELIST ? 3 : 0)) _manager.expirePoll(this);
-
         return this;
     }
 
@@ -62,11 +66,11 @@ public class Poll {
 
         for (Vote vote : votes) {
             if (vote.type == VoteType.UPVOTE) {
-                upVotes += 1;
-                if (vote.wasDouble) upVotes += 1;
+                if (vote.wasDouble) upVotes += 2;
+                else upVotes += 1;
             } else if (vote.type == VoteType.DOWNVOTE) {
-                downVotes += 1;
-                if (vote.wasDouble) downVotes += 1;
+                if (vote.wasDouble) downVotes += 2;
+                else downVotes += 1;
             }
         }
 
