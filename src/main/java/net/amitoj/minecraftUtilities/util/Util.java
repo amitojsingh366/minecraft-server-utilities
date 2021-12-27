@@ -31,7 +31,9 @@ public class Util {
     public static void sendWH(JSONObject data, String url) {
         HttpURLConnection con = null;
         try {
-            data.put("allowed_mentions", new JSONObject().put("parse", new JSONArray()));
+            JSONObject allowedMentions = new JSONObject();
+            allowedMentions.put("parse", new JSONArray());
+            data.put("allowed_mentions", allowedMentions);
             con = (HttpURLConnection) new URL(url).openConnection();
             con.setDoOutput(true);
             con.setRequestMethod("POST");
