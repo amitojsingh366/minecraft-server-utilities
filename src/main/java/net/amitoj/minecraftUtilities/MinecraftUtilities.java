@@ -9,6 +9,8 @@ import net.amitoj.minecraftUtilities.structures.PollManager;
 import net.amitoj.minecraftUtilities.util.Config;
 import net.amitoj.minecraftUtilities.util.Database;
 import net.amitoj.minecraftUtilities.util.Updater;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import static net.amitoj.minecraftUtilities.util.Util.*;
@@ -40,6 +42,13 @@ public final class MinecraftUtilities extends JavaPlugin {
         this.getCommand("minecraftdiscordchat").setExecutor(new CommandMinecraftDiscordChat(this));
         this.getCommand("coordinates").setExecutor(new CommandCoordinates(this));
         this.getCommand("discord").setExecutor(new CommandDiscord(this));
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        if (event.getPlayer().isBanned()) {
+            syncCommands(this.discordClient.jda, this.config.guildID);
+        }
     }
 
     @Override

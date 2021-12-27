@@ -8,6 +8,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import static net.amitoj.minecraftUtilities.util.Util.sendWH;
+import static net.amitoj.minecraftUtilities.util.Util.syncCommands;
 
 public class PlayerQuitListener implements Listener {
     private boolean _enabled = true;

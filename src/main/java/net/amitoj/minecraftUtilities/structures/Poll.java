@@ -18,7 +18,7 @@ public class Poll {
     public PollType type;
     public Integer upVotes;
     public Integer downVotes;
-    public Stack<Vote> votes = new Stack<Vote>();
+    public Stack<Vote> votes = new Stack<>();
     public Boolean expired;
     public String username;
 
