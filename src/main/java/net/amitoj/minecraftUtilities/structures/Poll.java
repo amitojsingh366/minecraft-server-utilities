@@ -53,8 +53,7 @@ public class Poll {
                 Message m = generatePollEmbed(this, username, false);
                 _iHook.editOriginal(m).queue();
             }
-            if (votes.size() >= Bukkit.getOnlinePlayers().size() + (
-                    (this.type == PollType.KICK || this.type == PollType.REBOOT) ? 0 : 3))
+            if (votes.size() >= (Math.max(Bukkit.getOnlinePlayers().size(), this.type == PollType.KICK ? 0 : 3)))
                 _manager.expirePoll(this);
         }
     }
@@ -87,8 +86,7 @@ public class Poll {
             calculateVotes();
             _iHook.editOriginal(generatePollEmbed(this, this.username, true)).queue();
             if (this.upVotes > this.downVotes && (this.type == PollType.KICK || this.votes.size() >=
-                    (Math.max(Bukkit.getOnlinePlayers().size(), 3)) + (
-                            (this.type == PollType.KICK || this.type == PollType.REBOOT) ? 0 : 3))) {
+                    (Math.max(Bukkit.getOnlinePlayers().size(), 3)))) {
                 switch (this.type) {
                     case KICK:
                         Player kickPlayer = Bukkit.getPlayer(this.username);
