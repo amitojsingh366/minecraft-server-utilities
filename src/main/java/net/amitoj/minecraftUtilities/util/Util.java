@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.ButtonStyle;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -220,9 +221,11 @@ public class Util {
                 null);
 
         Button allowButton = Button.secondary("poll:upvote:" + poll.uuid.toString(), poll.upVotes.toString())
-                .withEmoji(Emoji.fromUnicode("\uD83D\uDD3C")).withDisabled(disabled);
+                .withEmoji(Emoji.fromUnicode("\uD83D\uDD3C")).withDisabled(disabled)
+                .withStyle(disabled && poll.upVotes > poll.downVotes ? ButtonStyle.SUCCESS : ButtonStyle.SECONDARY);
         Button denyButton = Button.secondary("poll:downvote:" + poll.uuid.toString(), poll.downVotes.toString())
-                .withEmoji(Emoji.fromUnicode("\uD83D\uDD3D")).withDisabled(disabled);
+                .withEmoji(Emoji.fromUnicode("\uD83D\uDD3D")).withDisabled(disabled)
+                .withStyle(disabled && poll.downVotes > poll.upVotes ? ButtonStyle.SUCCESS : ButtonStyle.SECONDARY);
 
         Message message = new MessageBuilder()
                 .setEmbeds(messageEmbed)
