@@ -18,10 +18,14 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.Objects;
@@ -237,6 +241,41 @@ public class Util {
 
     public static UUID generateOfflineId(String username){
         return UUID.nameUUIDFromBytes( ( "OfflinePlayer:" + username ).getBytes( Charsets.UTF_8 ) );
+    }
+
+    public static void addToWhitelist(UUID uuid, String username){
+        String whitelistPath = Bukkit.getServer().getWorldContainer().getPath() + "/whitelist.json";
+        JSONArray whitelist = new JSONArray();
+        FileReader reader = null;
+        try {
+            reader = new FileReader(whitelistPath);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        JSONParser jsonParser = new JSONParser();
+        try {
+            whitelist = (JSONArray) jsonParser.parse(reader);
+            reader.close();
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject newPlayer = new JSONObject();
+        newPlayer.put("uuid", uuid.toString());
+        newPlayer.put("name", username);
+
+        whitelist.add(newPlayer);
+
+        File file = new File(whitelistPath);
+        if (file.delete()) {
+            if (!Files.exists(Paths.get(whitelistPath))) {
+                try {
+                    Files.write(Paths.get(whitelistPath), whitelist.toJSONString().getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
 

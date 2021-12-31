@@ -8,7 +8,6 @@ import net.amitoj.minecraftUtilities.listeners.*;
 import net.amitoj.minecraftUtilities.structures.PollManager;
 import net.amitoj.minecraftUtilities.util.Config;
 import net.amitoj.minecraftUtilities.util.Database;
-import net.amitoj.minecraftUtilities.util.Updater;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +18,6 @@ import static net.amitoj.minecraftUtilities.util.Util.*;
 public final class MinecraftUtilities extends JavaPlugin {
     public DiscordClient discordClient;
     public Config config = new Config(this);
-    public Updater updater = new Updater(this);
     public Database database = new Database(this);
     public PollManager polls = new PollManager(this);
 

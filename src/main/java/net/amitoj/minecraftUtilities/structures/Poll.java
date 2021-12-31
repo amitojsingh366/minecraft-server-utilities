@@ -9,8 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.*;
 
-import static net.amitoj.minecraftUtilities.util.Util.generateOfflineId;
-import static net.amitoj.minecraftUtilities.util.Util.generatePollEmbed;
+import static net.amitoj.minecraftUtilities.util.Util.*;
 import static net.amitoj.rebooter.util.util.RebootServer;
 
 public class Poll {
@@ -111,11 +110,8 @@ public class Poll {
                         }
                         break;
                     case WHITELIST:
-                        OfflinePlayer whitelistPlayer = Bukkit.getOfflinePlayer(generateOfflineId(this.username));
-                        Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, () -> {
-                            whitelistPlayer.setWhitelisted(true);
-                            Bukkit.reloadWhitelist();
-                        });
+                        addToWhitelist(generateOfflineId(this.username), this.username);
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(_plugin, Bukkit::reloadWhitelist);
                         _iHook.sendMessage("`" + this.username + "` was whitelisted!").queue();
                         break;
                     case REBOOT:
