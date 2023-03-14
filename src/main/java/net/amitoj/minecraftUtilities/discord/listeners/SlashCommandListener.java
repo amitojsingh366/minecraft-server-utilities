@@ -4,9 +4,10 @@ import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.amitoj.minecraftUtilities.discord.commands.List;
 import net.amitoj.minecraftUtilities.discord.commands.Stats;
 import net.amitoj.minecraftUtilities.discord.commands.poll.*;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 public class SlashCommandListener extends ListenerAdapter {
     private MinecraftUtilities _plugin;
@@ -35,7 +36,7 @@ public class SlashCommandListener extends ListenerAdapter {
     }
 
     @Override
-    public void onSlashCommand(SlashCommandEvent event) {
+    public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
         if (event.getGuild() == null) {
             event.reply("This command cannot be run in this server").queue();
             return;
@@ -75,6 +76,5 @@ public class SlashCommandListener extends ListenerAdapter {
                 event.reply("Coming soon ;)").queue();
                 break;
         }
-
     }
 }

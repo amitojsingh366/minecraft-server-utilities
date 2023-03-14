@@ -4,7 +4,9 @@ import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.amitoj.minecraftUtilities.structures.Poll;
 import net.amitoj.minecraftUtilities.structures.PollType;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -19,10 +21,10 @@ public class Whitelist {
         this._plugin = plugin;
     }
 
-    public void execute(SlashCommandEvent event) {
+    public void execute(SlashCommandInteractionEvent event) {
         String username = event.getOption("username").getAsString();
         Poll poll = this._plugin.polls.createPoll(PollType.WHITELIST, username);
-        Message message = generatePollEmbed(poll, username, false);
-        event.reply(message).queue(poll::set_iHook);
+        MessageEditData message = generatePollEmbed(poll, username, false);
+        event.reply(MessageCreateData.fromEditData((message))).queue(poll::set_iHook);
     }
 }

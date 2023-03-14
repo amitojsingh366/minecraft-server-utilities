@@ -3,6 +3,8 @@ package net.amitoj.minecraftUtilities.structures;
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -10,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 import static net.amitoj.minecraftUtilities.util.Util.*;
-import static net.amitoj.rebooter.util.util.RebootServer;
 
 public class Poll {
     public UUID uuid;
@@ -49,7 +50,7 @@ public class Poll {
             }
             calculateVotes();
             if (_iHook != null) {
-                Message m = generatePollEmbed(this, username, false);
+                MessageEditData m = generatePollEmbed(this, username, false);
                 _iHook.editOriginal(m).queue();
             }
             if (votes.size() >= (Math.max(Bukkit.getOnlinePlayers().size(), this.type == PollType.KICK ? 0 : 3)))
@@ -115,12 +116,7 @@ public class Poll {
                         _iHook.sendMessage("`" + this.username + "` was whitelisted!").queue();
                         break;
                     case REBOOT:
-                        _iHook.sendMessage("The server will be rebooted").queue();
-                        try {
-                            RebootServer();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                        _iHook.sendMessage("This functionality has been removed, please contact the server owner.").queue();
                         break;
                 }
             } else {

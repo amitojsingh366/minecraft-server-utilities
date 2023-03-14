@@ -1,10 +1,7 @@
 package net.amitoj.minecraftUtilities.discord;
 
 import net.amitoj.minecraftUtilities.MinecraftUtilities;
-import net.amitoj.minecraftUtilities.discord.listeners.ButtonListener;
-import net.amitoj.minecraftUtilities.discord.listeners.ReadyListener;
-import net.amitoj.minecraftUtilities.discord.listeners.SlashCommandListener;
-import net.amitoj.minecraftUtilities.discord.listeners.MessageListener;
+import net.amitoj.minecraftUtilities.discord.listeners.*;
 import net.amitoj.minecraftUtilities.util.Config;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -33,13 +30,14 @@ public class DiscordClient extends ListenerAdapter {
         this._config = plugin.config;
 
         if (_config.enabled) {
-            JDABuilder builder = JDABuilder.createDefault(_config.discordToken);
+            JDABuilder builder = JDABuilder.createDefault(_config.discordToken).enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT);
             builder.setActivity(Activity.watching("your every move"));
 
             try {
                 messageListener = new MessageListener(_config.channelID);
                 builder.addEventListeners(new ReadyListener());
                 builder.addEventListeners(new SlashCommandListener(_plugin, _config.guildID));
+                builder.addEventListeners(new CommandAutoCompleteListener());
                 builder.addEventListeners(new ButtonListener(plugin));
                 builder.addEventListeners(messageListener);
                 builder.enableIntents(GatewayIntent.GUILD_MEMBERS);
@@ -51,7 +49,7 @@ public class DiscordClient extends ListenerAdapter {
                 jda.awaitReady();
 
                 syncCommands(jda, _config.guildID);
-            } catch (LoginException | InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }

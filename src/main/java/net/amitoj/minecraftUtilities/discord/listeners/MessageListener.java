@@ -2,7 +2,7 @@ package net.amitoj.minecraftUtilities.discord.listeners;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.MessageSticker;
+import net.dv8tion.jda.api.entities.sticker.Sticker;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -34,7 +34,7 @@ public class MessageListener extends ListenerAdapter {
                         attachments.append("an embed]");
                     }
 
-                    for (MessageSticker sticker : event.getMessage().getStickers()) {
+                    for (Sticker sticker : event.getMessage().getStickers()) {
                         if (isEmpty) {
                             attachments.append("\n[Sent ");
                         } else {

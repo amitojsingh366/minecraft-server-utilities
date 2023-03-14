@@ -1,6 +1,6 @@
 package net.amitoj.minecraftUtilities.discord.commands;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -9,7 +9,7 @@ import java.util.Collection;
 public class List {
     public List() {}
 
-    public void execute(SlashCommandEvent event) {
+    public void execute(SlashCommandInteractionEvent event) {
         StringBuilder onlinePlayerNames = new StringBuilder();
         Collection<? extends Player> onlinePlayers = Bukkit.getServer().getOnlinePlayers();
 

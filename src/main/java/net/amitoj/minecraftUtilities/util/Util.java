@@ -4,17 +4,18 @@ import com.google.common.base.Charsets;
 import net.amitoj.minecraftUtilities.structures.Poll;
 import net.amitoj.minecraftUtilities.structures.PollType;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.*;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.interactions.components.ButtonStyle;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import net.dv8tion.jda.api.utils.messages.MessageEditBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageEditData;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -27,8 +28,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.OffsetDateTime;
-import java.util.Collection;
-import java.util.Objects;
 import java.util.UUID;
 
 public class Util {
@@ -83,40 +82,25 @@ public class Util {
 
     public static void syncCommands(JDA jda, String guildID) {
         OptionData usernameOptionData = new OptionData(OptionType.STRING, "username",
-                "Username of the player to perform the action on", true);
-
-        if (Bukkit.hasWhitelist()) {
-            Collection<? extends OfflinePlayer> whitelistedPlayers = Bukkit.getServer().getWhitelistedPlayers();
-            if (!whitelistedPlayers.isEmpty()) {
-                for (OfflinePlayer player : whitelistedPlayers) {
-                    usernameOptionData.addChoice(Objects.requireNonNull(player.getName()), player.getUniqueId().toString());
-                }
-            }
-        }
+                "Username of the player to perform the action on", true, true);
 
         OptionData unbanUsernameOptionData = new OptionData(OptionType.STRING, "username",
                 "Username of the player to perform the action on", true);
 
-        Collection<? extends OfflinePlayer> bannedPlayers = Bukkit.getServer().getBannedPlayers();
-        if (!bannedPlayers.isEmpty()) {
-            for (OfflinePlayer player : bannedPlayers) {
-                unbanUsernameOptionData.addChoice(Objects.requireNonNull(player.getName()), player.getUniqueId().toString());
-            }
-        }
-
-        CommandData statsCommand = new CommandData("stats",
+        SlashCommandData statsCommand = Commands.slash("stats",
                 "Get basic stats about your minecraft server");
+
         jda.getGuildById(guildID)
                 .upsertCommand(statsCommand)
                 .queue();
 
-        CommandData listCommand = new CommandData("list",
+        SlashCommandData listCommand = Commands.slash("list",
                 "List all the online people on your minecraft server");
         jda.getGuildById(guildID)
                 .upsertCommand(listCommand)
                 .queue();
 
-        CommandData pollCommand = new CommandData("poll",
+        SlashCommandData pollCommand = Commands.slash("poll",
                 "Vote on a certain aspect of the Minecraft Server");
 
         SubcommandData kickSubCommand = new SubcommandData("kick", "Vote on a player to be kicked");
@@ -163,9 +147,9 @@ public class Util {
         Button banButton = Button.danger("ban:" + loggedPlayer.getUniqueId() + ":" + discordId, "Ban IP")
                 .withEmoji(Emoji.fromUnicode("❎"));
 
-        Message loginMessage = new MessageBuilder()
+        MessageCreateData loginMessage = new MessageCreateBuilder()
                 .setEmbeds(loginMessageEmbed)
-                .setActionRows(ActionRow.of(whitelistButton, banButton))
+                .addActionRow(whitelistButton, banButton)
                 .build();
         jda.getUserById(discordId).openPrivateChannel()
                 .flatMap(channel -> channel.sendMessage(loginMessage))
@@ -193,9 +177,9 @@ public class Util {
         Button denyButton = Button.danger("acchange:deny:" + player.getUniqueId() + ":" + newUser.getId(), "Deny Change")
                 .withEmoji(Emoji.fromUnicode("❎"));
 
-        Message message = new MessageBuilder()
+        MessageCreateData message = new MessageCreateBuilder()
                 .setEmbeds(messageEmbed)
-                .setActionRows(ActionRow.of(allowButton, denyButton))
+                .addActionRow(allowButton, denyButton)
                 .build();
 
         oldUser.openPrivateChannel()
@@ -203,7 +187,7 @@ public class Util {
                 .queue();
     }
 
-    public static Message generatePollEmbed(Poll poll, String username, Boolean disabled) {
+    public static MessageEditData generatePollEmbed(Poll poll, String username, Boolean disabled) {
         String action = poll.type == PollType.KICK ? "Kick"
                 : poll.type == PollType.BAN ? "Ban" : poll.type == PollType.UNBAN ? "Unban" : "Whitelist";
 
@@ -231,9 +215,9 @@ public class Util {
                 .withEmoji(Emoji.fromUnicode("\uD83D\uDD3D")).withDisabled(disabled)
                 .withStyle(disabled && poll.downVotes > poll.upVotes ? ButtonStyle.SUCCESS : ButtonStyle.SECONDARY);
 
-        Message message = new MessageBuilder()
+        MessageEditData message = new MessageEditBuilder()
                 .setEmbeds(messageEmbed)
-                .setActionRows(ActionRow.of(allowButton, denyButton))
+                .setActionRow(allowButton, denyButton)
                 .build();
 
         return message;

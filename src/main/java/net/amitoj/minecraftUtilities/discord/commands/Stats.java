@@ -1,8 +1,10 @@
 package net.amitoj.minecraftUtilities.discord.commands;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
+import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.bukkit.Bukkit;
 
 import java.io.File;
@@ -12,7 +14,7 @@ import java.util.Date;
 public class Stats {
     public Stats() {}
 
-    public void execute(SlashCommandEvent event) {
+    public void execute(SlashCommandInteractionEvent event) {
         final long duration = ManagementFactory.getRuntimeMXBean().getUptime();
         final long years = duration / 31104000000L;
         final long months = duration / 2592000000L % 12;
@@ -40,11 +42,11 @@ public class Stats {
                 .setColor(0x00AA00)
                 .setThumbnail(icon_url);
 
-        MessageBuilder message = new MessageBuilder().setEmbeds(embed.build());
+        MessageCreateBuilder message = new MessageCreateBuilder().setEmbeds(embed.build());
 
         if (icon.exists()) {
-            event.reply(message.build())
-                    .addFile(icon, "server-icon.png")
+            FileUpload file = FileUpload.fromData(new File(icon_url), "server-icon.png");
+            event.reply(message.addFiles(file).build())
                     .queue();
         } else {
             event.reply(message.build())

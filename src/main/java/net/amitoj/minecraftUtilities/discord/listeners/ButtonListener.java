@@ -4,10 +4,11 @@ import net.amitoj.minecraftUtilities.MinecraftUtilities;
 import net.amitoj.minecraftUtilities.structures.PlayerData;
 import net.amitoj.minecraftUtilities.structures.Poll;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -20,7 +21,8 @@ public class ButtonListener extends ListenerAdapter {
     }
 
     @Override
-    public void onButtonClick(ButtonClickEvent event) {
+    public void onButtonInteraction(@NotNull ButtonInteractionEvent event) {
+
         String buttonId = Objects.requireNonNull(event.getButton()).getId();
         assert buttonId != null;
         String[] resolvedAction = buttonId.split(":");
